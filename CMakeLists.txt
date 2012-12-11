@@ -169,12 +169,15 @@ if (gtest_build_tests)
                         PROPERTIES
                         COMPILE_DEFINITIONS "GTEST_LINKED_AS_SHARED_LIBRARY=1")
 
-  if (NOT MSVC OR NOT MSVC_VERSION EQUAL 1600)
+  if (NOT MSVC OR MSVC_VERSION LESS 1600)
     # The C++ Standard specifies tuple_element<int, class>.
     # Yet MSVC 10's <utility> declares tuple_element<size_t, class>.
     # That declaration conflicts with our own standard-conforming
     # tuple implementation.  Therefore using our own tuple with
     # MSVC 10 doesn't compile.
+    #
+    # in MSVC 11, tuple is build in std namespace, so we remove
+    # internal tuple
     cxx_library(gtest_main_use_own_tuple "${cxx_use_own_tuple}"
       src/gtest-all.cc src/gtest_main.cc)
 

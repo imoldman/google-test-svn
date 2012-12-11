@@ -66,6 +66,12 @@ macro(config_compiler_and_linker)
       # Resolved overload was found by argument-dependent lookup.
       set(cxx_base_flags "${cxx_base_flags} -wd4675")
     endif()
+    if (MSVC_VERSION EQUAL 1700)
+      # in MSVC 11, the number of tuple count is controlled by this macro
+      # we use max value(i.e. 10) to make Google Test work
+      set(cxx_base_flags "${cxx_base_flags} -D_VARIADIC_MAX=10")
+      set(cxx_base_flags "${cxx_base_flags} -wd4702")
+    endif()
     set(cxx_base_flags "${cxx_base_flags} -D_UNICODE -DUNICODE -DWIN32 -D_WIN32")
     set(cxx_base_flags "${cxx_base_flags} -DSTRICT -DWIN32_LEAN_AND_MEAN")
     set(cxx_exception_flags "-EHsc -D_HAS_EXCEPTIONS=1")
